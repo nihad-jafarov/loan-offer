@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Kredit Müraciəti</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    /* ──────────────── MOBILE ──────────────── */
+    body {
+      background: #fff;
+      overflow: hidden;
+    }
+
+    .phone {
+      width: 100%;
+      height: 100%;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* ──────────────── DESKTOP ──────────────── */
+    @media (min-width: 600px) {
+      body {
+        background: #000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+      }
+
+      .phone {
+        width: 375px;
+        height: 100vh;
+        border-radius: 0;
+        overflow: hidden;
+        flex-shrink: 0;
+      }
+    }
+
+    /* ──────────────── NAVIGATION ──────────────── */
+    .nav {
+      height: 44px;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .back-btn {
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ──────────────── SCROLL BODY ──────────────── */
+    .scroll-body {
+      flex: 1;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .scroll-body::-webkit-scrollbar { display: none; }
+
+    /* ──────────────── OFFERED AMOUNT ──────────────── */
+    .offered-label {
+      font-size: 16px;
+      font-weight: 600;
+      color: #222;
+      line-height: 24px;
+      padding: 16px 16px 0;
+    }
+    .offered-amount {
+      font-size: 25px;
+      font-weight: 700;
+      color: #222;
+      line-height: 32px;
+      padding: 12px 16px;
+    }
+
+    /* ──────────────── SLIDER BLOCKS ──────────────── */
+    .slider-block {
+      padding: 16px 16px 0;
+    }
+    .field-label {
+      font-size: 12px;
+      font-weight: 400;
+      color: #999;
+      line-height: 18px;
+      margin-bottom: 4px;
+    }
+    .input-row {
+      background: #f5f5f5;
+      border: 1px solid #e2e2e2;
+      border-radius: 8px 8px 0 0;
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      z-index: 1;
+      margin-bottom: -2px;
+    }
+    .input-num {
+      font-size: 16px;
+      font-weight: 400;
+      color: #222;
+      line-height: 24px;
+    }
+    .input-sfx {
+      font-size: 16px;
+      font-weight: 400;
+      color: #999;
+      line-height: 24px;
+    }
+
+    /* Slider track */
+    .track-wrap {
+      position: relative;
+      height: 6px;
+      overflow: visible;
+    }
+    .track-bg {
+      position: absolute;
+      top: 0;
+      left: 0; right: 0;
+      height: 6px;
+      background: #e0e0e0;
+      border-radius: 3px;
+    }
+    .track-fill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 6px;
+      background: #ff6400;
+      border-radius: 3px;
+      pointer-events: none;
+    }
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      position: absolute;
+      top: 0;
+      left: 0; right: 0;
+      width: 100%;
+      height: 6px;
+      background: transparent;
+      outline: none;
+      cursor: pointer;
+      z-index: 2;
+      margin: 0;
+    }
+    input[type="range"]::-webkit-slider-runnable-track {
+      background: transparent;
+      height: 6px;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15), 0 0 0 0.5px rgba(0,0,0,0.08);
+      cursor: pointer;
+      margin-top: -11px;
+    }
+    input[type="range"]::-moz-range-track {
+      background: transparent;
+      height: 6px;
+      border: none;
+    }
+    input[type="range"]::-moz-range-thumb {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      border: none;
+      cursor: pointer;
+    }
+
+    .min-max {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 6px;
+    }
+    .min-max span {
+      font-size: 12px;
+      color: #999;
+      line-height: 18px;
+    }
+
+    /* ──────────────── SECTION TITLE ──────────────── */
+    .section-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #222;
+      line-height: 24px;
+      padding: 16px 16px 0;
+    }
+
+    /* ──────────────── DETAILS CARD ──────────────── */
+    .details-card {
+      margin: 16px 16px 0;
+      background: #f5f5f5;
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .detail-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .icon-pill {
+      width: 40px;
+      height: 40px;
+      background: rgba(50, 173, 230, 0.1);
+      border-radius: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .detail-texts {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .detail-lbl {
+      font-size: 12px;
+      color: #999;
+      line-height: 18px;
+    }
+    .detail-val {
+      font-size: 16px;
+      font-weight: 600;
+      color: #222;
+      line-height: 24px;
+    }
+
+    /* ──────────────── AMOUNT WARNING ──────────────── */
+    .amount-warning {
+      font-size: 12px;
+      font-weight: 500;
+      color: #e53935;
+      padding: 8px 16px 0;
+      min-height: 0;
+      line-height: 18px;
+    }
+
+    /* ──────────────── BOTTOM BAR ──────────────── */
+    .bottom {
+      flex-shrink: 0;
+      background: #fff;
+      padding: 24px 16px calc(env(safe-area-inset-bottom, 0px) + 24px);
+    }
+    .btn-confirm {
+      width: 100%;
+      background: #ff6400;
+      border: none;
+      border-radius: 12px;
+      padding: 16px;
+      font-family: inherit;
+      font-size: 16px;
+      font-weight: 500;
+      color: #fff;
+      line-height: 24px;
+      cursor: pointer;
+      display: block;
+    }
+    .btn-confirm:active { opacity: 0.88; }
+
+    .home-bar {
+      height: 34px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 8px;
+    }
+    .home-pill {
+      width: 134px;
+      height: 5px;
+      background: #999;
+      border-radius: 100px;
+    }
+  </style>
+</head>
+<body>
+<div class="phone">
+
+  <!-- ── NAVIGATION ── -->
+  <div class="nav">
+    <div class="back-btn">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <path d="M15 18L9 12L15 6" stroke="#222" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- ── SCROLLABLE CONTENT ── -->
+  <div class="scroll-body">
+
+    <p class="offered-label">Təklif olunan məbləğ</p>
+    <p class="offered-amount">15.000 ₼</p>
+
+    <!-- Kredit məbləği -->
+    <div class="slider-block">
+      <p class="field-label">Kredit məbləği</p>
+      <div class="input-row">
+        <span class="input-num" id="amountDisp">7.500</span>
+        <span class="input-sfx">₼</span>
+      </div>
+      <div class="track-wrap">
+        <div class="track-bg"></div>
+        <div class="track-fill" id="amountFill"></div>
+        <input type="range" id="amountSlider" step="50" oninput="onAmount(this)">
+      </div>
+      <div class="min-max">
+        <span id="amountMin"></span>
+        <span id="amountMax"></span>
+      </div>
+    </div>
+
+    <!-- Kredit müddəti -->
+    <div class="slider-block">
+      <p class="field-label">Kredit müddəti</p>
+      <div class="input-row">
+        <span class="input-num" id="termDisp">36</span>
+        <span class="input-sfx">ay</span>
+      </div>
+      <div class="track-wrap">
+        <div class="track-bg"></div>
+        <div class="track-fill" id="termFill"></div>
+        <input type="range" id="termSlider" oninput="onTerm(this)">
+      </div>
+      <div class="min-max">
+        <span id="termMin"></span>
+        <span id="termMax"></span>
+      </div>
+    </div>
+
+    <!-- Kreditin detalları -->
+    <p class="section-title">Kreditin detalları</p>
+
+    <div class="details-card">
+      <!-- İFD -->
+      <div class="detail-row">
+        <div class="icon-pill">
+          <img width="24" height="24" src="https://www.figma.com/api/mcp/asset/8317647b-cbe7-4daf-ab00-d1572c4b7dca" alt="">
+        </div>
+        <div class="detail-texts">
+          <span class="detail-lbl">İllik Faiz Dərəcəsi (İFD)</span>
+          <span class="detail-val" id="ifd">17%</span>
+        </div>
+      </div>
+      <!-- Komissiya -->
+      <div class="detail-row">
+        <div class="icon-pill">
+          <img width="24" height="24" src="https://www.figma.com/api/mcp/asset/8317647b-cbe7-4daf-ab00-d1572c4b7dca" alt="">
+        </div>
+        <div class="detail-texts">
+          <span class="detail-lbl">Komissiya</span>
+          <span class="detail-val" id="commission">0.5%</span>
+        </div>
+      </div>
+      <!-- Aylıq ödəniş -->
+      <div class="detail-row">
+        <div class="icon-pill">
+          <img width="24" height="24" src="https://www.figma.com/api/mcp/asset/25f6ac74-7fe5-4679-a4ec-406eb193e2f3" alt="">
+        </div>
+        <div class="detail-texts">
+          <span class="detail-lbl">Aylıq ödəniş</span>
+          <span class="detail-val" id="monthly">678 ₼</span>
+        </div>
+      </div>
+    </div>
+
+    <p class="amount-warning" id="amountWarning"></p>
+
+    <div style="height:16px"></div>
+  </div>
+
+  <!-- ── BOTTOM ── -->
+  <div class="bottom">
+    <button class="btn-confirm">Təsdiq et</button>
+  </div>
+
+</div>
+<script>
+  let D = null;
+
+  function dotFmt(n) {
+    return Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  }
+
+  function setFill(fillId, slider) {
+    const pct = (slider.value - slider.min) / (slider.max - slider.min) * 100;
+    document.getElementById(fillId).style.width = pct.toFixed(2) + '%';
+  }
+
+  function getBracket(duration) {
+    return D.brackets.find(b => duration <= b.maxDuration) || D.brackets[D.brackets.length - 1];
+  }
+
+  function calcAndDisplay() {
+    const amount   = +document.getElementById('amountSlider').value;
+    const duration = +document.getElementById('termSlider').value;
+    const bracket  = getBracket(duration);
+    const r        = bracket.rate / 100 / 12;
+    const annuity  = amount * r / (1 - Math.pow(1 + r, -duration));
+
+    const flatThreshold = bracket.commissionFlat ? bracket.commissionFlat / (bracket.commission / 100) : null;
+    const commissionText = (flatThreshold && amount <= flatThreshold)
+      ? bracket.commissionFlat + ' ₼'
+      : bracket.commission + '%';
+
+    document.getElementById('ifd').textContent        = bracket.rate + '%';
+    document.getElementById('commission').textContent = commissionText;
+    document.getElementById('monthly').textContent    = dotFmt(annuity) + ' ₼';
+
+    const warning = document.getElementById('amountWarning');
+    if (bracket.maxAmount && amount > bracket.maxAmount) {
+      warning.textContent = 'Bu müddət üçün maksimum ' + dotFmt(bracket.maxAmount) + ' ₼ götürə bilərsiniz';
+    } else {
+      warning.textContent = '';
+    }
+  }
+
+  function initFromApi(data) {
+    D = data;
+    const aSlider = document.getElementById('amountSlider');
+    const tSlider = document.getElementById('termSlider');
+
+    aSlider.min = D.minLimit;    aSlider.max = D.maxLimit;    aSlider.value = D.maxLimit;
+    tSlider.min = D.minDuration; tSlider.max = D.maxDuration; tSlider.value = D.maxDuration;
+
+    document.querySelector('.offered-amount').textContent = dotFmt(D.maxLimit) + ' ₼';
+    document.getElementById('amountDisp').textContent = dotFmt(D.maxLimit);
+    document.getElementById('termDisp').textContent   = D.maxDuration;
+    document.getElementById('amountMin').textContent  = dotFmt(D.minLimit) + ' ₼';
+    document.getElementById('amountMax').textContent  = dotFmt(D.maxLimit) + ' ₼';
+    document.getElementById('termMin').textContent    = D.minDuration      + ' ay';
+    document.getElementById('termMax').textContent    = D.maxDuration      + ' ay';
+
+    setFill('amountFill', aSlider);
+    setFill('termFill',   tSlider);
+    calcAndDisplay();
+  }
+
+  async function loadLoanOffer() {
+    try {
+      const res  = await fetch('/api/loan-offer', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          bpmReference: 'BPM1168408MB',
+          pincode: '5BFQTJA',
+          requestedLoanAmount: 10000,
+          requestedLoanDuration: 48
+        })
+      });
+      const json = await res.json();
+      if (json.status.statusCode === 0) initFromApi(json.result);
+    } catch {
+      // dev mock:
+      initFromApi({
+        minLimit: 300, maxLimit: 10000,
+        minDuration: 3, maxDuration: 48,
+        brackets: [
+          { maxDuration: 3,  rate: 11.9, commission: 1.5, commissionFlat: 20, maxAmount: 3180 },
+          { maxDuration: 4,  rate: 11.9, commission: 1.5, commissionFlat: 20, maxAmount: 4220 },
+          { maxDuration: 5,  rate: 11.9, commission: 1.5, commissionFlat: 20, maxAmount: 5249 },
+          { maxDuration: 6,  rate: 11.9, commission: 1.5, commissionFlat: 20, maxAmount: 6268 },
+          { maxDuration: 7,  rate: 11.9, commission: 1.5, commissionFlat: 20, maxAmount: 7277 },
+          { maxDuration: 8,  rate: 11.9, commission: 1.5, commissionFlat: 20, maxAmount: 8277 },
+          { maxDuration: 9,  rate: 11.9, commission: 1.5, commissionFlat: 20, maxAmount: 9266 },
+          { maxDuration: 24, rate: 13.9, commission: 0.5, commissionFlat: 20 },
+          { maxDuration: 36, rate: 15.9, commission: 0.5, commissionFlat: 20 },
+          { maxDuration: 48, rate: 16.9, commission: 0.5, commissionFlat: 20 },
+        ],
+      });
+    }
+  }
+
+  function onAmount(s) {
+    setFill('amountFill', s);
+    document.getElementById('amountDisp').textContent = dotFmt(s.value);
+    calcAndDisplay();
+  }
+
+  function onTerm(s) {
+    setFill('termFill', s);
+    document.getElementById('termDisp').textContent = s.value;
+    calcAndDisplay();
+  }
+
+  loadLoanOffer();
+</script>
+</body>
+</html>
